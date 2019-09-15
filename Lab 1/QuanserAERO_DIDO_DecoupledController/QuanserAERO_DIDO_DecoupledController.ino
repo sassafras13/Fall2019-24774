@@ -322,38 +322,83 @@ void loop() {
     Error[0]=desired[0]-YawRad;
     Error[1]=desired[1]-PitchRad;
     //
+    //============================
     // update input 1, output 1
+    //============================
     float H11 = Error[0]; // input to the controller is the error in the system
     float Y11 = 0;
     for (int i = 0;i<=n11;i++){
       H11 += -a11[i]*Ho11[i];
       Y11 += b11[i]*Ho11[i];
     }
-    // I think my yaw and pitch are backwards from the hardware
-    // what do I do about the fact that both input signals contribute to output??
-    motor1Voltage = Y11+b11[0]*H11;
-    // update the stack of Ho values
-    for (int i=n11;i>0;i--){
-      Ho11[i]=Ho11[i-1];
+    //===========================
+    // update input 2, output 1
+    //===========================
+    float H21 = Error[0]; // input to the controller is the error in the system
+    float Y21 = 0;
+    for (int i = 0;i<=n21;i++){
+      H21 += -a21[i]*Ho21[i];
+      Y21 += b21[i]*Ho21[i];
     }
-    Ho11[0] = H11;
+    //=========================
+    // send command to motor 1
+    //=========================
+    // I think my yaw and pitch are backwards from the hardware
+    motor1Voltage = Y11+b11[0]*H11+Y21+b21[0]*H21;
     //
+    //
+    //===========================
+    // update input 1, output 2
+    //===========================
+    float H12 = Error[0]; // input to the controller is the error in the system
+    float Y12 = 0;
+    for (int i = 0;i<=n12;i++){
+      H12 += -a12[i]*Ho12[i];
+      Y12 += b12[i]*Ho12[i];
+    }
+    //===========================
     // update input 2, output 2
+    //===========================
     float H22 = Error[1]; // input to the controller is the error in the system
     float Y22 = 0;
     for (int i = 0;i<= n22;i++){
         H22 += -a22[i]*Ho22[i];
         Y22 += b22[i]*Ho22[i];
     }
-    motor0Voltage = Y22+b22[0]*H22;
-    // update the stack of Ho values
+    //=========================
+    // send command to motor 2
+    //=========================
+    motor0Voltage = Y12+b12[0]*H12+Y22+b22[0]*H22;
+    //
+    //
+    //===================
+    // update Ho11 stack
+    //===================
+    for (int i=n11;i>0;i--){
+      Ho11[i]=Ho11[i-1];
+    }
+    Ho11[0] = H11;
+    //===================
+    // update Ho12 stack
+    //===================
+    for (int i=n12;i>0;i--){
+      Ho12[i]=Ho12[i-1];
+    }
+    Ho12[0] = H12;
+    //===================
+    // update Ho21 stack
+    //===================
+    for (int i=n21;i>0;i--){
+      Ho21[i]=Ho21[i-1];
+    }
+    Ho21[0] = H21;
+    //===================
+    // update Ho22 stack
+    //===================
     for (int i=n22;i>0;i--){
       Ho22[i]=Ho22[i-1];
     }
     Ho22[0] = H22;
-    //
-
-
  //****************************************************end**************************************************************************************
  
  //
