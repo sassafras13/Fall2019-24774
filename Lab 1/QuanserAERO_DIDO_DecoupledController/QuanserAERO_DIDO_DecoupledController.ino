@@ -1,3 +1,4 @@
+
 /*
 Quanser Aero
 
@@ -116,8 +117,8 @@ int LEDBlue = 0;
 //float Pitch_dot_k1=0;
 //float Yaw_n_k1=0;
 //float Yaw_dot_k1=0;
-//float Pitch_deg=0;
-//float Yaw_deg=0;
+float Pitch_deg=0;
+float Yaw_deg=0;
 //============================================================
 // ============ Global variables decoupled controller =========================
 // values obtained by Emma Benjaminson in Lab1.mlx
@@ -128,18 +129,18 @@ int n11 = 9; // number of coefficients in denominator of tf from input 1 to outp
 int n12 = 9; // input 1 to output 2
 int n21 = 9; 
 int n22 = 9; 
-float Ho11[n11] = {0,0,0,0,0,0,0,0,0}; //H0 array of zeros
-float Ho12[n12] = {0,0,0,0,0,0,0,0,0};
-float Ho21[n21] = {0,0,0,0,0,0,0,0,0};
-float Ho22[n22] = {0,0,0,0,0,0,0,0,0};
-float a11[n11] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823}; // array of polynomial coefficients for a (denominator) from input 1 to output 1
-float a12[n12] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823};
-float a21[n21] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823};
-float a22[n22] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823};
-float b11[n11] = {1755,-7571,12330,-8558,1010,1732,-770.6,72.42,0}; // array of polynomial coefficients for b (numerator) from input 1 to output 1
-float b12[n12] = {2154,-9292,15130,-10500,1240,2126,-945.7,88.88,0}; 
-float b21[n21] = {-2236,9643,-15700,10890,-1280,-2207,981.2,-92.19,0};
-float b22[n22] = {1171,-5051,8223,-5704,670.7,1156,-514,48.29,0};
+float Ho11[9] = {0,0,0,0,0,0,0,0,0}; //H0 array of zeros
+float Ho12[9] = {0,0,0,0,0,0,0,0,0};
+float Ho21[9] = {0,0,0,0,0,0,0,0,0};
+float Ho22[9] = {0,0,0,0,0,0,0,0,0};
+float a11[9] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823}; // array of polynomial coefficients for a (denominator) from input 1 to output 1
+float a12[9] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823};
+float a21[9] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823};
+float a22[9] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823};
+float b11[9] = {1755,-7571,12330,-8558,1010,1732,-770.6,72.42,0}; // array of polynomial coefficients for b (numerator) from input 1 to output 1
+float b12[9] = {2154,-9292,15130,-10500,1240,2126,-945.7,88.88,0}; 
+float b21[9] = {-2236,9643,-15700,10890,-1280,-2207,981.2,-92.19,0};
+float b22[9] = {1171,-5051,8223,-5704,670.7,1156,-514,48.29,0};
 int milisecs=0;
 int secs=0;
 int pitchOn=0; // flips on and off to mark status of pitch reference signal
@@ -327,7 +328,7 @@ void loop() {
     //============================
     float H11 = Error[0]; // input to the controller is the error in the system
     float Y11 = 0;
-    for (int i = 0;i<=n11;i++){
+    for (int i = 0;i<n11;i++){
       H11 += -a11[i]*Ho11[i];
       Y11 += b11[i]*Ho11[i];
     }
@@ -336,7 +337,7 @@ void loop() {
     //===========================
     float H21 = Error[0]; // input to the controller is the error in the system
     float Y21 = 0;
-    for (int i = 0;i<=n21;i++){
+    for (int i = 0;i<n21;i++){
       H21 += -a21[i]*Ho21[i];
       Y21 += b21[i]*Ho21[i];
     }
@@ -352,7 +353,7 @@ void loop() {
     //===========================
     float H12 = Error[0]; // input to the controller is the error in the system
     float Y12 = 0;
-    for (int i = 0;i<=n12;i++){
+    for (int i = 0;i<n12;i++){
       H12 += -a12[i]*Ho12[i];
       Y12 += b12[i]*Ho12[i];
     }
@@ -361,7 +362,7 @@ void loop() {
     //===========================
     float H22 = Error[1]; // input to the controller is the error in the system
     float Y22 = 0;
-    for (int i = 0;i<= n22;i++){
+    for (int i = 0;i<n22;i++){
         H22 += -a22[i]*Ho22[i];
         Y22 += b22[i]*Ho22[i];
     }
