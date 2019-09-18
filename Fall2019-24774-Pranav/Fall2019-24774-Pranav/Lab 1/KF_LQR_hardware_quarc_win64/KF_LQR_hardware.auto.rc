@@ -1,0 +1,2 @@
+#include <winuser.rh>
+1 RT_MANIFEST "KF_LQR_hardware.auto.manifest"

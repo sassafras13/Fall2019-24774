@@ -25,6 +25,7 @@ void SetpointGen_Team4()
      LEDRed = 0;
      LEDGreen = 0;
      LEDBlue = 999;
+     //Serial.print(secs%pitchRate) ; 
      // check to see if we need to update pitchOn
      if (secs%pitchRate == 0){
       pitchOn = 0; // if the time is a multiple of the pitchRate then change the value
