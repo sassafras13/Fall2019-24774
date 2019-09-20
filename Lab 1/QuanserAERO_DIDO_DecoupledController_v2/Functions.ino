@@ -66,11 +66,19 @@
 //}
 void SetpointGen_Team4()
 {
-  if (milisecs>=1000){secs++; secs2++; milisecs=0;Serial.print("Seconds (pitch):");Serial.println(secs);Serial.print("Seconds (yaw):");Serial.println(secs2);}
+  Serial.println("updating clock") ; 
+  Serial.print("Milisecs: "); Serial.println(milisecs) ; 
+  if (milisecs>=500){
+    secs++; 
+    secs2++; 
+    milisecs=0;
+    Serial.print("!!!SECONDS (pitch):"); Serial.println(secs);
+    Serial.print("!!!SECONDS (yaw):");Serial.println(secs2); 
+  }
   // --------------------- PITCH ---------------------------------
   if (secs>=pitchRate && secs<(pitchRate+1)){
     if (pitchOn == 0){
-      Serial.println("Change pitchRate to 1") ; 
+      Serial.println("!!!CHANGE PITCH RATE TO 1!!!") ; 
       //desired[0] = 0.5236 ; // set value of pitch reference signal HIGH
       desired[0] = 0 ; 
       LEDRed = 0;
@@ -81,7 +89,7 @@ void SetpointGen_Team4()
       return ; 
     }
     else {
-      Serial.println("Change pitchRate to 0") ; 
+      Serial.println("!!!CHANGE PITCH RATE TO 0!!!") ; 
       //desired[0] = -0.5236 ; // set value of pitch reference signal LOW
       desired[0] = 0 ; 
       LEDRed = 0;
@@ -95,7 +103,7 @@ void SetpointGen_Team4()
   // ----------------------- YAW -----------------------------
   if (secs2>=yawRate && secs2<(yawRate+1)){
   if (yawOn == 0){
-    Serial.println("Change yawRate to 1") ; 
+    Serial.println("!!!CHANGE YAW RATE TO 1!!!") ; 
     //desired[1] = 0.7845; // set value of yaw reference signal HIGH    
     desired[1] = 0 ; 
 //    LEDRed = 0;
@@ -106,7 +114,7 @@ void SetpointGen_Team4()
     return ; 
   }
   else {
-    Serial.println("Change yawRate to 0") ; 
+    Serial.println("!!!CHANGE YAW RATE TO 0!!!") ; 
     //desired[1] = -0.7845 ; // set value of yaw reference signal LOW
     desired[1] = 0 ; 
 //    LEDRed = 0;
