@@ -125,30 +125,46 @@ float Yaw_deg=0;
 //
 // DEFINITION: INPUT 1 IS YAW, INPUT 2 IS PITCH
 //
-int n11 = 9; // number of coefficients in denominator of tf from input 1 to output 1
-int n12 = 9; // input 1 to output 2
-int n21 = 9; 
-int n22 = 9; 
-float Ho11[9] = {0,0,0,0,0,0,0,0,0}; //H0 array of zeros
-float Ho12[9] = {0,0,0,0,0,0,0,0,0};
-float Ho21[9] = {0,0,0,0,0,0,0,0,0};
-float Ho22[9] = {0,0,0,0,0,0,0,0,0};
-//float a11[9] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823}; // array of polynomial coefficients for a (denominator) from input 1 to output 1
-float a11[9] = {1,-7.235,22.87,-41.27,46.47,-33.45,15.03,-3.853,0.4317}; 
-//float a12[9] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823};
-float a12[9] = {1,-7.235,22.87,-41.27,46.47,-33.45,15.03,-3.853,0.4317};
-//float a21[9] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823};
-float a21[9] = {1,-7.235,22.87,-41.27,46.47,-33.45,15.03,-3.853,0.4317};
-//float a22[9] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823};
-float a22[9] = {1,-7.235,22.87,-41.27,46.47,-33.45,15.03,-3.853,0.4317};
-//float b11[9] = {0,1755,-7571,12330,-8558,1010,1732,-770.6,72.42}; // array of polynomial coefficients for b (numerator) from input 1 to output 1
-float b11[9] = {3.16,-15.0,26.05,-15.55,-8.811,17.94,-9.589,1.805,0};
-//float b12[9] = {0,2154,-9292,15130,-10500,1240,2126,-945.7,88.88}; 
-float b12[9] = {3.878,-18.41,31.97,-19.09,-10.81,22.02,-11.77,2.215,0};
-//float b21[9] = {0,-2236,9643,-15700,10890,-1280,-2207,981.2,-92.19};
-float b21[9] = {-0.4676,2.218,-3.848,2.29,1.31,-2.655,1.417,-0.2666,0};
-//float b22[9] = {0,1171,-5051,8223,-5704,670.7,1156,-514,48.29};
-float b22[9] = {0.2449,-1.162,2.015,-1.2,-0.6863,1.391,-0.7424,0.1396,0};
+//int n11 = 9; // number of coefficients in denominator of tf from input 1 to output 1
+//int n12 = 9; // input 1 to output 2
+//int n21 = 9; 
+//int n22 = 9; 
+//float Ho11[9] = {0,0,0,0,0,0,0,0,0}; //H0 array of zeros
+//float Ho12[9] = {0,0,0,0,0,0,0,0,0};
+//float Ho21[9] = {0,0,0,0,0,0,0,0,0};
+//float Ho22[9] = {0,0,0,0,0,0,0,0,0};
+////float a11[9] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823}; // array of polynomial coefficients for a (denominator) from input 1 to output 1
+//float a11[9] = {1,-7.235,22.87,-41.27,46.47,-33.45,15.03,-3.853,0.4317}; 
+////float a12[9] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823};
+//float a12[9] = {1,-7.235,22.87,-41.27,46.47,-33.45,15.03,-3.853,0.4317};
+////float a21[9] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823};
+//float a21[9] = {1,-7.235,22.87,-41.27,46.47,-33.45,15.03,-3.853,0.4317};
+////float a22[9] = {1,-5.546,13.02,-16.74,12.73,-5.74,1.449,-0.1783,0.00823};
+//float a22[9] = {1,-7.235,22.87,-41.27,46.47,-33.45,15.03,-3.853,0.4317};
+////float b11[9] = {0,1755,-7571,12330,-8558,1010,1732,-770.6,72.42}; // array of polynomial coefficients for b (numerator) from input 1 to output 1
+//float b11[9] = {3.16,-15.0,26.05,-15.55,-8.811,17.94,-9.589,1.805,0};
+////float b12[9] = {0,2154,-9292,15130,-10500,1240,2126,-945.7,88.88}; 
+//float b12[9] = {3.878,-18.41,31.97,-19.09,-10.81,22.02,-11.77,2.215,0};
+////float b21[9] = {0,-2236,9643,-15700,10890,-1280,-2207,981.2,-92.19};
+//float b21[9] = {-0.4676,2.218,-3.848,2.29,1.31,-2.655,1.417,-0.2666,0};
+////float b22[9] = {0,1171,-5051,8223,-5704,670.7,1156,-514,48.29};
+//float b22[9] = {0.2449,-1.162,2.015,-1.2,-0.6863,1.391,-0.7424,0.1396,0};
+int n11 = 5 ; 
+int n12 = 5 ; 
+int n21 = 5 ; 
+int n22 = 5 ; 
+float Ho11[5] = {0,0,0,0,0};
+float Ho12[5] = {0,0,0,0,0};
+float Ho21[5] = {0,0,0,0,0};
+float Ho22[5] = {0,0,0,0,0};
+float a11[5] = {-2.773,2.665,-0.9826,0.09072,0};
+float a12[5] = {-2.773,2.665,-0.9826,0.09072,0};
+float a21[5] = {-2.773,2.665,-0.9826,0.09072,0};
+float a22[5] = {-2.773,2.665,-0.9826,0.09072,0};
+float b11[5] = {0,1171,-1804,100.5,532.3};
+float b12[5] = {0,1437,-2214,123.4,653.3};
+float b21[5] = {0,-3350,5165,-290.9,-1524};
+float b22[5] = {0,1755,-2706,152.4,798.3};
 int milisecs=0;
 int secs=0;
 int secs2=0; // for counting yaw reference
@@ -329,8 +345,8 @@ void loop() {
     float PitchRad= 0.01743*encoder2Deg;
     float YawRad=0.01743*encoder3Deg;
     //
-    Error[0]=desired[0]-YawRad;
-    Error[1]=desired[1]-PitchRad;
+    Error[0]=desired[0]-PitchRad;
+    Error[1]=desired[1]-YawRad;
 //    Serial.print("Desired:"); Serial.println(desired[0]);
 //    Serial.print("Error:"); Serial.println(Error[0]);
     //
@@ -349,44 +365,46 @@ void loop() {
 //    //===========================
 //    // update input 2, output 1
 //    //===========================
-//    float H21 = Error[0]; // input to the controller is the error in the system
-//    float Y21 = 0;
-//    for (int i = 0;i<n21;i++){
-//      H21 += -a21[i]*Ho21[i];
-//      Y21 += b21[i]*Ho21[i];
-//    }
+    float H21 = Error[0]; // input to the controller is the error in the system
+    float Y21 = 0;
+    for (int i = 0;i<n21;i++){
+      H21 += -a21[i]*Ho21[i];
+      Y21 += b21[i]*Ho21[i];
+    }
     //=========================
     // send command to motor 1
     //=========================
-    // I think my yaw and pitch are backwards from the hardware
-    motor1Voltage = Y11+b11[0]*H11;
-    //motor1Voltage = Y11+b11[0]*H11+Y21+b21[0]*H21;
-    Serial.print("motor 1 voltage"); Serial.println(motor1Voltage) ; 
+    Serial.print("Y11"); Serial.println(Y11) ; 
+    Serial.print("b11[0]"); Serial.println(b11[0]) ; 
+    Serial.print("H11"); Serial.println(H11) ; 
+    //motor0Voltage = Y11+b11[0]*H11;
+    motor1Voltage = Y11+b11[0]*H11+Y21+b21[0]*H21;
+    Serial.print("motor 0 voltage"); Serial.println(motor0Voltage) ; 
     //
     //
     //===========================
     // update input 1, output 2
     //===========================
-//    float H12 = Error[0]; // input to the controller is the error in the system
-//    float Y12 = 0;
-//    for (int i = 0;i<n12;i++){
-//      H12 += -a12[i]*Ho12[i];
-//      Y12 += b12[i]*Ho12[i];
-//    }
-//    //===========================
-//    // update input 2, output 2
-//    //===========================
-//    float H22 = Error[1]; // input to the controller is the error in the system
-//    float Y22 = 0;
-//    for (int i = 0;i<n22;i++){
-//        H22 += -a22[i]*Ho22[i];
-//        Y22 += b22[i]*Ho22[i];
-//    }
-//    //=========================
-//    // send command to motor 2
-//    //=========================
-//    motor0Voltage = Y12+b12[0]*H12+Y22+b22[0]*H22;
-//    Serial.print("motor 1 voltage"); Serial.println(motor1Voltage) ; 
+    float H12 = Error[0]; // input to the controller is the error in the system
+    float Y12 = 0;
+    for (int i = 0;i<n12;i++){
+      H12 += -a12[i]*Ho12[i];
+      Y12 += b12[i]*Ho12[i];
+    }
+    //===========================
+    // update input 2, output 2
+    //===========================
+    float H22 = Error[1]; // input to the controller is the error in the system
+    float Y22 = 0;
+    for (int i = 0;i<n22;i++){
+        H22 += -a22[i]*Ho22[i];
+        Y22 += b22[i]*Ho22[i];
+    }
+    //=========================
+    // send command to motor 2
+    //=========================
+    motor1Voltage = Y12+b12[0]*H12+Y22+b22[0]*H22;
+    Serial.print("motor 1 voltage"); Serial.println(motor1Voltage) ; 
     //
     //
     //===================
@@ -394,29 +412,30 @@ void loop() {
     //===================
     for (int i=n11;i>0;i--){
       Ho11[i]=Ho11[i-1];
+      Serial.print("Ho11"); Serial.println(Ho11[i]);
     }
     Ho11[0] = H11;
     //===================
     // update Ho12 stack
     //===================
-//    for (int i=n12;i>0;i--){
-//      Ho12[i]=Ho12[i-1];
-//    }
-//    Ho12[0] = H12;
+    for (int i=n12;i>0;i--){
+      Ho12[i]=Ho12[i-1];
+    }
+    Ho12[0] = H12;
     //===================
     // update Ho21 stack
     //===================
-//    for (int i=n21;i>0;i--){
-//      Ho21[i]=Ho21[i-1];
-//    }
-//    Ho21[0] = H21;
-//    //===================
-//    // update Ho22 stack
-//    //===================
-//    for (int i=n22;i>0;i--){
-//      Ho22[i]=Ho22[i-1];
-//    }
-//    Ho22[0] = H22;
+    for (int i=n21;i>0;i--){
+      Ho21[i]=Ho21[i-1];
+    }
+    Ho21[0] = H21;
+    //===================
+    // update Ho22 stack
+    //===================
+    for (int i=n22;i>0;i--){
+      Ho22[i]=Ho22[i-1];
+    }
+    Ho22[0] = H22;
  //****************************************************end**************************************************************************************
  
  //
@@ -424,16 +443,20 @@ void loop() {
  //
       if (motor0Voltage > 24.0) {
         motor0Voltage = 24.0;
+        Serial.print("motor 0 voltage"); Serial.println(motor0Voltage) ; 
       }
       else if (motor0Voltage < -24.0) {
         motor0Voltage = -24.0;
+        Serial.print("motor 0 voltage"); Serial.println(motor0Voltage) ; 
       }
 // set the saturation limit to +/- 15V for Motor1
       if (motor1Voltage > 24.0) {
         motor1Voltage = 24.0;
+        Serial.print("motor 1 voltage"); Serial.println(motor1Voltage) ; 
       }
       else if (motor1Voltage < -24.0) {
         motor1Voltage = -24.0;
+        Serial.print("motor 1 voltage"); Serial.println(motor1Voltage) ; 
       }
 
     

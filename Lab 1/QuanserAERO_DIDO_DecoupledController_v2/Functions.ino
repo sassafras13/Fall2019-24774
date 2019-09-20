@@ -71,7 +71,8 @@ void SetpointGen_Team4()
   if (secs>=pitchRate && secs<(pitchRate+1)){
     if (pitchOn == 0){
       Serial.println("Change pitchRate to 1") ; 
-      desired[1] = 0.5236 ; // set value of pitch reference signal HIGH
+      //desired[0] = 0.5236 ; // set value of pitch reference signal HIGH
+      desired[0] = 0 ; 
       LEDRed = 0;
       LEDGreen = 0;
       LEDBlue = 999 ; 
@@ -81,7 +82,8 @@ void SetpointGen_Team4()
     }
     else {
       Serial.println("Change pitchRate to 0") ; 
-      desired[1] = -0.5236 ; // set value of pitch reference signal LOW
+      //desired[0] = -0.5236 ; // set value of pitch reference signal LOW
+      desired[0] = 0 ; 
       LEDRed = 0;
       LEDGreen = 999;
       LEDBlue = 0;
@@ -94,7 +96,8 @@ void SetpointGen_Team4()
   if (secs2>=yawRate && secs2<(yawRate+1)){
   if (yawOn == 0){
     Serial.println("Change yawRate to 1") ; 
-    desired[0] = 0.7845; // set value of yaw reference signal HIGH    
+    //desired[1] = 0.7845; // set value of yaw reference signal HIGH    
+    desired[1] = 0 ; 
 //    LEDRed = 0;
 //    LEDGreen = 0;
 //    LEDBlue = 999 ; 
@@ -104,7 +107,8 @@ void SetpointGen_Team4()
   }
   else {
     Serial.println("Change yawRate to 0") ; 
-    desired[0] = -0.7845 ; // set value of yaw reference signal LOW
+    //desired[1] = -0.7845 ; // set value of yaw reference signal LOW
+    desired[1] = 0 ; 
 //    LEDRed = 0;
 //    LEDGreen = 999;
 //    LEDBlue = 0;
