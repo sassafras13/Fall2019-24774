@@ -104,7 +104,7 @@ int LEDBlue = 0;
 // ============= Global variables LQR controller ==============
 // Control gain K used here was taken from simulink demo model and tested in a rev C Aero on Oct. 28. 2016
 //
-float desired[4]={0,0,0,0};  /// 0 => Pitch, 1 ==> yaw
+float desired[4]={0.5236,0.7854,0,0};  /// 0 => Pitch, 1 ==> yaw
 float Error[4]={0,0,0,0};
 float StateX[4]={0,0,0,0};
 float gainP[4]={98.2088,-103.0645,32.2643,-29.075};
@@ -118,6 +118,12 @@ float Yaw_n_k1=0;
 float Yaw_dot_k1=0;
 float Pitch_deg=0;
 float Yaw_deg=0;
+float start=0; // start time 
+float PitchPeriod=16.7; // pitch period
+float YawPeriod=12.5 ; // yaw period 
+int iPitch = 0 ; 
+int iYaw = 0 ; 
+float eps = 0.01 ; 
 //============================================================
 //Setup serial builder
 Display displayData;
@@ -133,6 +139,9 @@ void setup() {
   // (Note that 250000 baud must be selected from the drop-down list on the Arduino
   // Serial Monitor for the data to be displayed properly.)
   Serial.begin(250000);
+
+  // get start time
+  start = millis() ; 
 }
 
 void loop() {
@@ -155,7 +164,8 @@ void loop() {
 
     //==============Setpoint Clock ===============
         milisecs++; 
-        SetpointGen();  // Creates different setpoits for Pitch and Yaw angles
+        //SetpointGen();  // Creates different setpoits for Pitch and Yaw angles
+        ReferenceGenerator() ; 
     //============================================
     
     // initialize the SPI bus using the defined speed, data order and data mode
@@ -489,5 +499,3 @@ void resetQuanserAero() {
   motor0MSB = 0x80;  // enable amplifier0
   motor1MSB = 0x80;  // enable amplifier1
 }
-
-

@@ -79,6 +79,46 @@ void SetpointGen()
        
       
 }
+void ReferenceGenerator()
+{
+  // check the current time
+  float current = millis() ; 
+  
+  // time interval = current time - start time 
+  float timeInt = current - start ; 
+  
+  // change the Pitch Period
+  // if the time interval >  (i*PitchPeriod) && time interval < (i*PitchPeriod + eps) 
+  if ( (timeInt > (iPitch * PitchPeriod)) && (timeInt < (iPitch * PitchPeriod + eps)) ){
+    // if the PitchRef > 0 
+    if (desired[0] > 0) {
+      // then set PitchRef = -ref
+      desired[0] = -0.5236 ; 
+      iPitch += 1 ; 
+      LEDGreen = 999 ; 
+    }
+    
+    // elseif the PitchRef < 0 
+    else if (desired[0] < 0) {
+      // then set PitchRef = +ref
+      desired[0] = 0.5236 ; 
+      iPitch += 1 ; 
+      LEDBlue = 999 ; 
+    }
+  }
+  
 
-
-
+  // change the Yaw Period
+  if ( (timeInt > (iYaw * YawPeriod)) && (timeInt < (iYaw * YawPeriod + eps)) ){
+    if (desired[1] > 0) {
+      desired[1] = -0.7854 ; 
+      iPitch += 1 ; 
+    }
+    
+    // elseif the PitchRef < 0 
+    else if (desired[1] < 0) {
+      desired[1] = 0.7854 ; 
+      iPitch += 1 ; 
+    }
+  }
+}

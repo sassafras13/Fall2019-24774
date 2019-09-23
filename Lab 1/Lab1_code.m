@@ -75,6 +75,23 @@ Kdecoupling = Gs*Kpid ;
 Kdecoupling = minreal(Kdecoupling);
 kDT_decouple = c2d(Kdecoupling,Ts,'zoh')  
 
+%% Our LQR controller
+
+a = 1250 ; 
+b = 50 ; 
+c = 0.005 ; 
+d = 0.009 ; 
+
+Q = [a, 0, 0, 0 ; 
+     0, b, 0, 0 ; 
+     0, 0, 0, 0 ; 
+     0, 0, 0, 0 ] ; 
+ 
+R = [c, 0 ; 
+     0, d ] ; 
+ 
+Klqr = lqr(Gnom,Q,R) 
+
 %% Bedillion's LQR controller
 
 % Controller
@@ -173,3 +190,8 @@ kDT_lqr = c2d(K_lqr,Ts,'zoh')
 %  
 % Sample time: 0.002 seconds
 % Discrete-time transfer function.
+
+% Klqr =
+% 
+%   271.3409  -82.6713   55.6928  -25.4978
+%   295.8319   41.9355   63.0417   13.1688
