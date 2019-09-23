@@ -37,24 +37,26 @@ Gs = minreal(Gs,1e-3) ;
 %% Decoupled Controller (CT to DT)
 
 % PID for yaw
-% Kp_y = 700; 
-% Ki_y = 20; 
-% Kd_y = 600; 
-Kp_y = 150; 
-Ki_y = 0; 
-Kd_y = 80; 
-N_y = 100; 
+Kp_y = 700; 
+Ki_y = 20; 
+Kd_y = 600; 
+% Kp_y = 150; 
+% Ki_y = 0; 
+% Kd_y = 80; 
+N_y = 1000; 
 Kyaw = Kp_y + Ki_y*(1/s) + Kd_y*(N_y / (1 + N_y*(1/s))) ; 
 
 % PID for pitch
-% Kp_p = 700; 
-% Ki_p = 10; 
-% Kd_p = 400; 
-Kp_p = 200; 
-Ki_p = 60; 
-Kd_p = 80; 
-N_p = 100; 
+Kp_p = 700; 
+Ki_p = 10; 
+Kd_p = 400; 
+% Kp_p = 200; 
+% Ki_p = 60; 
+% Kd_p = 80; 
+N_p = 1000; 
 Kpitch = Kp_p + Ki_p*(1/s) + Kd_p*(N_y / (1 + N_y*(1/s))) ; 
+
+
 
 % sampling time
 Ts = 1/500 ; % assuming 500Hz sampling rate
@@ -64,6 +66,9 @@ Kpid = [Kpitch, 0 ; 0, Kyaw] ;
 Kpid = minreal(Kpid) ; 
 step(Kpid)
 kDT_PID = c2d(Kpid,Ts,'zoh') 
+
+% check PID controller CL stability
+step(feedback(Kpid*Gnom, eye(2))) 
 
 % decoupled controller DT
 Kdecoupling = Gs*Kpid ; 
@@ -78,3 +83,93 @@ K_lqr = [(1711*s + 4910)/(s+50), (-1557*s - 5153)/(s+50) ;
  
 % controller in DT
 kDT_lqr = c2d(K_lqr,Ts,'zoh')  
+
+%% Results
+
+% Pranav's PID
+% kDT_PID =
+%  
+%   From input 1 to output...
+%        400700 z^2 - 8.008e05 z + 4.001e05
+%    1:  ----------------------------------
+%              z^2 - 1.135 z + 0.1353
+%  
+%    2:  0
+%  
+%   From input 2 to output...
+%    1:  0
+%  
+%        600700 z^2 - 1.201e06 z + 6.001e05
+%    2:  ----------------------------------
+%              z^2 - 1.135 z + 0.1353
+%  
+% Sample time: 0.002 seconds
+% Discrete-time transfer function.
+
+% Keitaro's PID
+% kDT_PID =
+%  
+%   From input 1 to output...
+%        8200 z^2 - 1.636e04 z + 8164
+%    1:  ----------------------------
+%           z^2 - 1.819 z + 0.8187
+%  
+%    2:  0
+%  
+%   From input 2 to output...
+%    1:  0
+%  
+%        8150 z - 8123
+%    2:  -------------
+%         z - 0.8187
+%  
+% Sample time: 0.002 seconds
+% Discrete-time transfer function.
+% 
+% 
+% kDT_decouple =
+%  
+%   From input 1 to output...
+%           40.23 z^3 - 47.28 z^2 - 25.79 z + 32.83
+%    1:  ---------------------------------------------
+%        z^4 - 3.456 z^3 + 4.467 z^2 - 2.56 z + 0.5488
+%  
+%           49.38 z^3 - 58.02 z^2 - 31.65 z + 40.3
+%    2:  ---------------------------------------------
+%        z^4 - 3.456 z^3 + 4.467 z^2 - 2.56 z + 0.5488
+%  
+%   From input 2 to output...
+%           -76.31 z^2 + 13.48 z + 62.32
+%    1:  ----------------------------------
+%        z^3 - 2.456 z^2 + 2.011 z - 0.5488
+%  
+%           39.97 z^2 - 7.059 z - 32.65
+%    2:  ----------------------------------
+%        z^3 - 2.456 z^2 + 2.011 z - 0.5488
+%  
+% Sample time: 0.002 seconds
+% Discrete-time transfer function.
+% 
+% 
+% kDT_lqr =
+%  
+%   From input 1 to output...
+%        1711 z - 1702
+%    1:  -------------
+%         z - 0.9048
+%  
+%        2432 z - 2417
+%    2:  -------------
+%         z - 0.9048
+%  
+%   From input 2 to output...
+%        -1557 z + 1547
+%    1:  --------------
+%          z - 0.9048
+%  
+%        921.5 z - 915.2
+%    2:  ---------------
+%          z - 0.9048
+%  
+% Sample time: 0.002 seconds
+% Discrete-time transfer function.
