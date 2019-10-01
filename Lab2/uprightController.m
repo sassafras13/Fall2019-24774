@@ -52,7 +52,7 @@ D = [0 ;
      0 ] ; 
  
 % build SS model 
-G = ss(A,B,C,D) ; 
+Gnom = ss(A,B,C,D) ; 
 
 % CHECK THE PERFORMANCE OF THE ACTUAL SYSTEM AGAINST MY MODEL AND SEE IF
 % I'M CLOSE OR I NEED TO ADJUST IT
@@ -71,6 +71,9 @@ Balt = [0 ;
         49.1493 ] ; 
     
 Galt = ss(Aalt, Balt, C, D) ; 
+
+% NOTE: It makes sense that Galt is wildly unstable because it is
+% linearized about the inverted position which is inherently unstable
     
 %% LQR Controller
 
