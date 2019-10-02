@@ -1,0 +1,2 @@
+#include <winuser.rh>
+1 RT_MANIFEST "Quanser_Qube_ParametricSystemID_2018.auto.manifest"
