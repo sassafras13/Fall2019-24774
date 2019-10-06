@@ -1,7 +1,7 @@
 % 24-774 
 % Lab 2
 % Team 4
-% Parametric system identification
+% Least squares system identification
 % Code drawn from Prof. Bedillion's examples
 
 %%
@@ -18,6 +18,9 @@ close all ; clear all ; clc ;
 % run code to get nominal plant model
 uprightController 
 
+% run the parametric system identification script
+parametric_systemID
+
 % run the sys id in Simulink
 % sim('System_Identification_Parametric')
 % sim('Quanser_Qube_ParametricSystemID') 
@@ -29,8 +32,8 @@ uprightController
 % 3 = Gnom(1,2) (or Gnom(2,2) for theta)
 % 4 = plant output
 % 5 = reference signal 
-alphadata = load('sysID_parametric_alpha_input4.mat') ; 
-thetadata = load('sysID_parametric_theta_input4.mat') ; 
+alphadata = load('sysID_parametric_alpha_input3.mat') ; 
+thetadata = load('sysID_parametric_theta_input3.mat') ; 
 
 ydataalpha = alphadata.ans(4,:);
 udataalpha = alphadata.ans(1,:);
@@ -93,3 +96,10 @@ sgtitle('Input Magnitude = 0.5') ;
 % compare with other model in CT 
 Gmodalpha_CT = d2c(Gmodalpha)
 Gmodtheta_CT = d2c(Gmodtheta)
+
+figure(2)
+subplot(1,2,1)
+bode(Gmodalpha_CT, Gmodalpha_sys) ; legend('Least Squares','Parametric Fit') ; 
+subplot(1,2,2)
+bode(Gmodtheta_CT, Gmodtheta_sys) ; legend('Least Squares','Parametric Fit') ; 
+sgtitle('Alpha (left) ; Theta (right)') ; 

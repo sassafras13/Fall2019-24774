@@ -1,7 +1,7 @@
 % 24-774 
 % Lab 2
 % Team 4
-% System identification
+% Parametric system identification
 % Code drawn from Prof. Bedillion's examples
 
 clear all ; close all ; clc ; 
@@ -70,25 +70,25 @@ wt = makeweight(2,30,0.01);
 
 % How does Prof. Bedillion know that the system is stable, minimum phase,
 % and has relative degree 2?
-Gmodalpha = fitfrd(Galpha,2,2,wt);
-Gmodtheta = fitfrd(Gtheta,2,2,wt) ; 
+Gmodalpha_sys = fitfrd(Galpha,2,2,wt);
+Gmodtheta_sys = fitfrd(Gtheta,2,2,wt) ; 
 
 % compare parametric model to system ID data
 % bode(Gmod,tf(1,[1 1 5]))
 figure(1) ; 
 subplot(1,2,2) ; 
-bode(Gmodalpha,Gnom(1,1)) ; legend('Sys ID Plant MODIFIED','Nominal Plant') ; 
+bode(Gmodalpha_sys,Gnom(1,1)) ; legend('Sys ID Plant MODIFIED','Nominal Plant') ; 
 hold on
 sgtitle('Pendulum Arm (alpha)') ; 
-tf(Gmodalpha)
+tf(Gmodalpha_sys)
 
 
 figure(2)
 subplot(1,2,2) ; 
-bode(Gmodtheta,Gnom(4,1)) ; legend('Sys ID Plant MODIFIED','Nominal Plant') ; 
+bode(Gmodtheta_sys,Gnom(4,1)) ; legend('Sys ID Plant MODIFIED','Nominal Plant') ; 
 hold on
 sgtitle('Rotary (motor) arm (theta)') ; 
-tf(Gmodtheta) 
+tf(Gmodtheta_sys) 
 
 
 
