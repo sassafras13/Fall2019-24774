@@ -8,12 +8,20 @@ clear all ; close all ; clc ;
 
 %%
 
-% run code to generate plant model 
-uprightController
-% Gnom = Galt ; % comment out if you want to test Gnom
+% import system model from mfg
+Pendulum_Model
+G = system_dynamics ; % G = [alpha, theta, alphadot, thetadot]
+
+% differentiator and low pass filter for obtaining velocities (thanks
+% Pranav)
+s = tf('s');
+Diff_LPF = s/(s/50 +1); %Differentiation and LPF
+
+
+% LQR Controller from Mfg
+Klqr = [35, -2, 3, -1.5 ] ; % [pendulum, arm ; dot pendulum, dot arm] 
 
 % system ID procedure
-% sim('Quanser_Qube_SystemIdentification_2018') ; 
 Fs = 1000;            % Sampling frequency
 
 % load data
@@ -24,8 +32,8 @@ Fs = 1000;            % Sampling frequency
 % 4 = plant output
 % 5 = reference signal 
 
-alphadata = load('sysID_alpha.mat') ; 
-thetadata = load('sysID_theta.mat') ; 
+alphadata = load('sysID_parametric_alpha_mag10.mat') ; 
+thetadata = load('sysID_parametric_theta_mag10.mat') ; 
 
 L_alpha = length(alphadata.ans(1,:)) ; % Length of signal
 L_theta = length(thetadata.ans(1,:)) ;
@@ -55,40 +63,47 @@ Gtheta = frd(P1theta,ftheta*2*pi) ;
 
 % compare Bode plots for G and Gnom
 % bode(G,tf(1,[1 1 5]),{0.1,50082*pi}) ; legend('Measured Plant','Predicted Plant') ; 
-figure(1) ; 
-subplot(1,2,1) ; 
-bode(Galpha, Gnom(1,1), {0.1,50082*pi}) ; legend('Sys ID Plant','Nominal Plant') ; 
-
-figure(2) ; 
-subplot(1,2,1) ; 
-bode(Gtheta, Gnom(4,1), {0.1,50082*pi}); legend('Sys ID Plant','Nominal Plant') ; 
+% figure(1) ; 
+% subplot(1,2,1) ; 
+% bode(Galpha, G(1,1), {0.1,50082*pi}) ; legend('Sys ID Raw Data','Plant Model') ;
+% title('Alpha - Pendulum Angle') ; 
+% 
+% figure(1) ; 
+% subplot(1,2,2) ; 
+% bode(Gtheta, G(2,1), {0.1,50082*pi}); legend('Sys ID Raw Data','Plant Model') ; 
+% title('Theta - Rotary Arm Angle') ; 
+% 
+% figure(1)
+% sgtitle('Raw Data vs Plant Model Obtained Via Chirp Input') ; 
 
 %% parametric model based on data
 % set a weight that weights the low frequency data more heavily because it
 % is cleaner
-wt = makeweight(2,30,0.01);
+wt = makeweight(2,50,0.01);
 
-% How does Prof. Bedillion know that the system is stable, minimum phase,
-% and has relative degree 2?
 Gmodalpha_sys = fitfrd(Galpha,2,2,wt);
 Gmodtheta_sys = fitfrd(Gtheta,2,2,wt) ; 
 
 % compare parametric model to system ID data
-% bode(Gmod,tf(1,[1 1 5]))
-figure(1) ; 
-subplot(1,2,2) ; 
-bode(Gmodalpha_sys,Gnom(1,1)) ; legend('Sys ID Plant MODIFIED','Nominal Plant') ; 
-hold on
-sgtitle('Pendulum Arm (alpha)') ; 
-tf(Gmodalpha_sys)
-
+figure(2) ; 
+subplot(1,2,1) ; 
+% bode(Gmodalpha_sys,G(1,1),{0.1,50082*pi}) ; legend('Sys ID Parametric Model','Plant Model') ; 
+bode(Gmodalpha_sys,{0.1,50082*pi}) ;
+title('Alpha - Pendulum Angle') ; 
 
 figure(2)
 subplot(1,2,2) ; 
-bode(Gmodtheta_sys,Gnom(4,1)) ; legend('Sys ID Plant MODIFIED','Nominal Plant') ; 
-hold on
-sgtitle('Rotary (motor) arm (theta)') ; 
+% bode(Gmodtheta_sys,G(2,1),{0.1,50082*pi}) ; legend('Sys ID Parametric Model','Plant Model') ; 
+bode(Gmodtheta_sys,{0.1,50082*pi}) ;
+title('Theta - Rotary Arm Angle') ;
+
+figure(2)
+sgtitle('Sys ID Parametric Model Gain = 10') ; 
+
+tf(Gmodalpha_sys)
 tf(Gmodtheta_sys) 
 
+tf(G(1,1))
+tf(G(2,1))
 
 

@@ -82,13 +82,21 @@ Galt = ss(Aalt, Balt, Calt, D) ;
     
 %% LQR Controller
 
+Pendulum_Model
+G = system_dynamics ; 
+% bode(G) ; 
+
 % differentiator and low pass filter for obtaining velocities (thanks
 % Pranav)
 s = tf('s');
 Diff_LPF = s/(s/50 +1); %Differentiation and LPF
 
-Q = diag([1, 1, 1, 1]) ; 
+Q = diag([10, 1, 10, 10]) ; 
 R = 1 ; 
 
-Klqr = lqr(Galt,Q,R) ; 
-Klqr = Klqr' ; 
+% Klqr = lqr(G,Q,R) ; 
+% Klqr = Klqr' ; 
+
+%% LQR Controller from Mfg
+
+Klqr = [35, -2, 3, -1.5 ] ; % [pendulum, arm ; dot pendulum, dot arm] 

@@ -15,15 +15,12 @@ close all ; clear all ; clc ;
 
 %%
 
-% run code to get nominal plant model
-uprightController 
+% import system model from mfg
+Pendulum_Model
+G = system_dynamics ; % G = [alpha, theta, alphadot, thetadot]
 
-% run the parametric system identification script
+% run the parametric fit script so we can compare models
 parametric_systemID
-
-% run the sys id in Simulink
-% sim('System_Identification_Parametric')
-% sim('Quanser_Qube_ParametricSystemID') 
 
 % load data
 % data structure: 
@@ -32,8 +29,8 @@ parametric_systemID
 % 3 = Gnom(1,2) (or Gnom(2,2) for theta)
 % 4 = plant output
 % 5 = reference signal 
-alphadata = load('sysID_parametric_alpha_input3.mat') ; 
-thetadata = load('sysID_parametric_theta_input3.mat') ; 
+alphadata = load('sysID_leastsquares_alpha_input2.mat') ; 
+thetadata = load('sysID_leastsquares_theta_input2.mat') ; 
 
 ydataalpha = alphadata.ans(4,:);
 udataalpha = alphadata.ans(1,:);
@@ -74,12 +71,12 @@ for ii = nt+1:Lt
 end
 
 % pseudo-inverse solution 
-thetaA = pinv(X)*Y
-thetaT = pinv(Xt)*Yt
+thetaA = pinv(X)*Y ;
+thetaT = pinv(Xt)*Yt ;
 
 % build the model
-Gmodalpha = tf(thetaA(3:end)',[1 thetaA(1:2)'],1/1000)
-Gmodtheta = tf(thetaT(3:end)',[1 thetaT(1:2)'],1/1000)
+Gmodalpha = tf(thetaA(3:end)',[1 thetaA(1:2)'],1/1000) ;
+Gmodtheta = tf(thetaT(3:end)',[1 thetaT(1:2)'],1/1000) ;
 
 % test the fit
 ymodalpha = lsim(Gmodalpha,udataalpha,[0:.001:0.001*(length(udataalpha)-1)]);
@@ -91,15 +88,19 @@ subplot(1,2,1)
 plot([ydataalpha',ymodalpha]) ; legend('Y data','Y mod') ; title('Alpha') ; 
 subplot(1,2,2)
 plot([ydatatheta',ymodtheta]) ; legend('Y data','Y mod') ; title('Theta') ; 
-sgtitle('Input Magnitude = 0.5') ; 
+sgtitle('Sys ID: Least Squares Time Domain Raw Data') ; 
 
 % compare with other model in CT 
-Gmodalpha_CT = d2c(Gmodalpha)
-Gmodtheta_CT = d2c(Gmodtheta)
+Gmodalpha_CT = d2c(Gmodalpha) ;
+Gmodtheta_CT = d2c(Gmodtheta) ;
 
 figure(2)
 subplot(1,2,1)
 bode(Gmodalpha_CT, Gmodalpha_sys) ; legend('Least Squares','Parametric Fit') ; 
+title('Alpha - Pendulum Angle') ; 
 subplot(1,2,2)
 bode(Gmodtheta_CT, Gmodtheta_sys) ; legend('Least Squares','Parametric Fit') ; 
-sgtitle('Alpha (left) ; Theta (right)') ; 
+title('Theta - Rotary Arm Angle') ;
+
+figure(2)
+sgtitle('Comparison of Least Squares and Parametric Fit Models') ; 

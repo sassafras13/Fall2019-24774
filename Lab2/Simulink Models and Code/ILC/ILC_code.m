@@ -25,7 +25,7 @@ Kd = 10 ;
 K = (Kp + Ki*(1/s) + Kd*s) / (s + 100) ; 
 KD = c2d(K,T) ; 
 
-Plant = c2d(Gtheta*(1-feedback(Gtheta*K,1)),T);
+Plant = GthetaD*(1-feedback(GthetaD*KD,1));
 
 G_inf = [1 1;-z*Plant 0];
 
@@ -49,13 +49,13 @@ e = [];
 % iterate on ILC learner
 for ii = 1:N
     sim('ILC');  %Get the data
-    e = [e;std(Response(1:end-1,2)-Response(1:end-1,3))];  %Record error value
-    Le = filter(b,a,Response(:,2)-Response(:,3));  %This performs the filtering - implements L
+    e = [e;std(Response.signals(1).values(1:end-1)-Response.signals(2).values(1:end-1))];  %Record error value
+    Le = filter(b,a,Response.signals(1).values(:)-Response.signals(2).values(:));  %This performs the filtering - implements L
     for ii = 1:100
         u_ilc(ii,2) = u_ilc(ii,2)+Le(ii+1);  %Implement ILC
     end
 end
 
 % plot the data
-plot(Response(1:end-1,1),Response(1:end-1,2)-Response(1:end-1,3))
+plot(Response.signals(1).values(1:end-1),Response.signals(1).values(1:end-1)-Response.signals(2).values(1:end-1))
 plot(e)
