@@ -32,18 +32,18 @@ Fs = 1000;            % Sampling frequency
 % 4 = plant output
 % 5 = reference signal 
 
-alphadata = load('sysID_parametric_alpha_mag10.mat') ; 
-thetadata = load('sysID_parametric_theta_mag10.mat') ; 
+alphadata = load('sysID_parametric_alpha_mag1.mat') ; 
+thetadata = load('sysID_parametric_theta_mag1.mat') ; 
 
 L_alpha = length(alphadata.ans(1,:)) ; % Length of signal
 L_theta = length(thetadata.ans(1,:)) ;
 
 % Take FFT of data
 Ualpha = fft(alphadata.ans(1,:));
-Yalpha = fft(alphadata.ans(4,:));
+Yalpha = fft(alphadata.ans(3,:));
 
 Utheta = fft(thetadata.ans(1,:)) ; 
-Ytheta = fft(thetadata.ans(4,:)) ; 
+Ytheta = fft(thetadata.ans(3,:)) ; 
 
 % singled sided FFT
 P2alpha = Yalpha./Ualpha;
@@ -62,19 +62,19 @@ ftheta = Fs*(0:(L_theta/2))/L_theta ;
 Gtheta = frd(P1theta,ftheta*2*pi) ; 
 
 % compare Bode plots for G and Gnom
-% bode(G,tf(1,[1 1 5]),{0.1,50082*pi}) ; legend('Measured Plant','Predicted Plant') ; 
-% figure(1) ; 
-% subplot(1,2,1) ; 
-% bode(Galpha, G(1,1), {0.1,50082*pi}) ; legend('Sys ID Raw Data','Plant Model') ;
-% title('Alpha - Pendulum Angle') ; 
-% 
-% figure(1) ; 
-% subplot(1,2,2) ; 
-% bode(Gtheta, G(2,1), {0.1,50082*pi}); legend('Sys ID Raw Data','Plant Model') ; 
-% title('Theta - Rotary Arm Angle') ; 
-% 
-% figure(1)
-% sgtitle('Raw Data vs Plant Model Obtained Via Chirp Input') ; 
+bode(G,tf(1,[1 1 5]),{0.1,50082*pi}) ; legend('Measured Plant','Predicted Plant') ; 
+figure(1) ; 
+subplot(1,2,1) ; 
+bode(Galpha, G(1,1), {0.1,50082*pi}) ; legend('Sys ID Raw Data','Plant Model') ;
+title('Alpha - Pendulum Angle') ; 
+
+figure(1) ; 
+subplot(1,2,2) ; 
+bode(Gtheta, G(2,1), {0.1,50082*pi}); legend('Sys ID Raw Data','Plant Model') ; 
+title('Theta - Rotary Arm Angle') ; 
+
+figure(1)
+sgtitle('Raw Data vs Plant Model Obtained Via Chirp Input') ; 
 
 %% parametric model based on data
 % set a weight that weights the low frequency data more heavily because it

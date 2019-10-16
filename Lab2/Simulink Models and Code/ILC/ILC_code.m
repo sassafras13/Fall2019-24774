@@ -11,51 +11,47 @@ clear all ; close all ; clc ;
 % load key variables
 s = tf('s') ;
 T = 0.1 ; % sampling rate 
-z = tf('z',T);
 
-Pendulum_Model % load pendulum model
-G = tf(system_dynamics) ; % plant model
-Gtheta = G(2,1) ; % tf for motor angle, theta
-GthetaD = c2d(Gtheta,T) ; % convert to discrete time
 
 % design basic PID controller for down configuration
-Kp = 10 ; 
-Ki = 10 ; 
-Kd = 10 ; 
+Kp = 0.2 ; 
+Ki = 0.7 ; 
+Kd = 2.0 ; 
 K = (Kp + Ki*(1/s) + Kd*s) / (s + 100) ; 
-KD = c2d(K,T) ; 
 
-Plant = GthetaD*(1-feedback(GthetaD*KD,1));
-
-G_inf = [1 1;-z*Plant 0];
-
-% design L with hinfsyn
-[L,CL,gam] = hinfsyn(G_inf,1,1);
-
-% convert to DSP
-L = tf(L);  %Convert to TF
-[num,den] = tfdata(L,'v');  %Extract polynomials
-L_DSP = filt(num,den,T);  %Convert to polynomials in z^{-1}
-[b,a] = tfdata(L_DSP,'v');  %Rip out the new polynomials for the filt command.
+alpha = 2 ; 
 
 % set number of iterations 
-N = 50 ; 
+N = 10 ; 
 
-u_ilc = [[0:T:10]' zeros(101,1)];  %Reset the ILC
+u_ilc = [[0:T:1]' zeros(11,1)];  %Reset the ILC
 
 % error for each iteration 
 e = [];
 
 % iterate on ILC learner
 for ii = 1:N
-    sim('ILC');  %Get the data
-    e = [e;std(Response.signals(1).values(1:end-1)-Response.signals(2).values(1:end-1))];  %Record error value
-    Le = filter(b,a,Response.signals(1).values(:)-Response.signals(2).values(:));  %This performs the filtering - implements L
-    for ii = 1:100
-        u_ilc(ii,2) = u_ilc(ii,2)+Le(ii+1);  %Implement ILC
+    qc_build_model('ILC_2018') ; 
+    qc_start_model('ILC_2018') ; 
+    pause ; 
+    load('response.mat') ; 
+    Response = ans(:,:)' ; % row 1 = time; row 2 = input signal ; row 3 = pendulum output ; row 4 = motor arm output
+    e = [e;std(Response(1:end-1,2)-Response(1:end-1,4))]  %Record error value
+    for ii = 1:10
+        u_ilc(ii,2) = u_ilc(ii,2)+alpha*(Response(ii+1,2)-Response(ii+1,4));
     end
 end
 
+load('response.mat') ; 
+Response = ans(:,:)' ; % row 1 = time; row 2 = input signal ; row 3 = pendulum output ; row 4 = motor arm output
+    
 % plot the data
-plot(Response.signals(1).values(1:end-1),Response.signals(1).values(1:end-1)-Response.signals(2).values(1:end-1))
+figure(1)
+plot(Response(1:end-1,1)',Response(1:end-1,2)-Response(1:end-1,4))
+title('Time Domain Response of Last Test') ; 
+xlabel('Time (s)') ; ylabel('Response') ; 
+
+figure(2)
 plot(e)
+title('Error on Each Iteration') ; 
+xlabel('Iteration') ; ylabel('Error') ; 

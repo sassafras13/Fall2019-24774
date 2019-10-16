@@ -32,10 +32,10 @@ parametric_systemID
 alphadata = load('sysID_leastsquares_alpha_input2.mat') ; 
 thetadata = load('sysID_leastsquares_theta_input2.mat') ; 
 
-ydataalpha = alphadata.ans(4,:);
+ydataalpha = alphadata.ans(3,:);
 udataalpha = alphadata.ans(1,:);
 
-ydatatheta = thetadata.ans(4,:) ;
+ydatatheta = thetadata.ans(3,:) ;
 udatatheta = thetadata.ans(1,:) ; 
 
 % build the ARMA model - ALPHA

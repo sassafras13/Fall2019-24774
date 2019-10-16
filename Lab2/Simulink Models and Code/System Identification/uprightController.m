@@ -94,9 +94,9 @@ Diff_LPF = s/(s/50 +1); %Differentiation and LPF
 Q = diag([10, 1, 10, 10]) ; 
 R = 1 ; 
 
-% Klqr = lqr(G,Q,R) ; 
-% Klqr = Klqr' ; 
+Klqr = lqr(G,Q,R) ; 
+Klqr = Klqr' ; 
 
 %% LQR Controller from Mfg
 
-Klqr = [35, -2, 3, -1.5 ] ; % [pendulum, arm ; dot pendulum, dot arm] 
+% Klqr = [35, -2, 3, -1.5 ] ; % [pendulum, arm ; dot pendulum, dot arm] 
